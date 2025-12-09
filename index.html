@@ -1,418 +1,917 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SelfMap Teens</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SelfMap Teens</title>
 
-<!-- ==========================
-     STYLE（全部ここに統合）
-========================== -->
-<style>
-/* =========================================
-   SelfMap Teens – デザイン統合
-========================================= */
-body {
-    margin: 0;
-    font-family: 'Hiragino Maru Gothic Pro', 'Yu Gothic', sans-serif;
-    background: #f0f8ff;
-    color: #333;
-}
-main {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 24px;
-}
-h1, h2 {
-    text-align: center;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #2a628f;
-}
-.screen { display: none; animation: fadeIn 0.3s ease-out; }
-.screen.active { display: block; }
+  <!-- ================== STYLE ================== -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-.btn-primary {
-    display: block;
-    width: 260px;
-    margin: 0 auto;
-    padding: 14px;
-    background: #6db8ff;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 80, 160, 0.2);
-    transition: 0.25s;
-}
-.btn-primary:hover { background: #5aa6ee; }
+    body {
+      margin: 0;
+      font-family: "Hiragino Maru Gothic Pro", "Yu Gothic", system-ui,
+        -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #243b6b 0, #050812 55%, #000 100%);
+      color: #f5f7ff;
+    }
 
-.btn-secondary {
-    padding: 10px 16px;
-    border-radius: 10px;
-    border: none;
-    background: #ffffff;
-    box-shadow: 0 3px 10px rgba(90, 150, 200, 0.2);
-    cursor: pointer;
-    margin: 4px;
-    transition: 0.25s;
-}
-.btn-secondary:hover { background: #f0f8ff; }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
+    }
 
-/* Island cards */
-#island-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-top: 20px;
-}
-.island-card {
-    background: #ffffff;
-    padding: 18px;
-    border-radius: 14px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(90, 150, 200, 0.25);
-    cursor: pointer;
-    transition: 0.2s;
-}
-.island-card:hover {
-    background: #eaf5ff;
-    transform: translateY(-3px);
-}
+    h1,
+    h2 {
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin: 0 0 16px;
+    }
 
-/* Questions */
-.question-header { margin-bottom: 20px; text-align: center; }
-.question-list { margin-top: 12px; }
-.question-item {
-    margin-bottom: 20px;
-    background: #ffffffcc;
-    backdrop-filter: blur(4px);
-    padding: 14px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(90, 150, 200, 0.18);
-}
-.question-label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 6px;
-    color: #2b5179;
-}
-.question-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #b7d4ea;
-    border-radius: 10px;
-    background: #f7fbff;
-    resize: vertical;
-}
+    h1 {
+      font-size: 32px;
+      color: #ffffff;
+      text-shadow: 0 0 16px rgba(140, 211, 255, 0.9);
+    }
 
-/* Buttons area */
-.center-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: wrap;
-    margin-top: 24px;
-}
+    h2 {
+      font-size: 24px;
+      color: #e6f1ff;
+    }
 
-/* Summary page */
-.summary-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-.summary-table th,
-.summary-table td {
-    border: 1px solid #cfe2f3;
-    padding: 10px;
-    vertical-align: top;
-}
-.summary-island-name {
-    background: #e4f1ff;
-    width: 100px;
-    font-weight: bold;
-}
-.summary-note { margin-top: 12px; font-size: 0.85rem; color: #4477aa; }
-.summary-actions { text-align: center; margin: 14px 0; }
-.summary-actions button { margin: 4px; }
+    p {
+      margin: 4px 0 12px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-</style>
+    a {
+      color: #88d4ff;
+    }
 
-<!-- html2canvas（画像保存に必要） -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    /* スクリーン共通パネル */
+    .screen {
+      display: none;
+      background: radial-gradient(circle at top, #1c2440 0, #040713 60%);
+      border-radius: 24px;
+      padding: 32px 24px 40px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(120, 196, 255, 0.2);
+    }
 
+    .screen.active {
+      display: block;
+    }
+
+    .lead {
+      text-align: center;
+      color: #d0ddff;
+      font-size: 14px;
+    }
+
+    .quote {
+      margin: 12px auto 20px;
+      text-align: center;
+      color: #bfcfff;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .quote span {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: #8da9ff;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 10px 24px;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        background 0.12s ease, opacity 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #45b6ff, #6df2ff);
+      color: #001119;
+      box-shadow: 0 0 16px rgba(120, 225, 255, 0.9);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 22px rgba(120, 225, 255, 1);
+    }
+
+    .btn-secondary {
+      background: rgba(19, 32, 66, 0.95);
+      color: #ecf3ff;
+      border: 1px solid rgba(139, 190, 255, 0.6);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(32, 48, 92, 0.98);
+      transform: translateY(-1px);
+    }
+
+    .center-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    /* マップ画面：カード */
+    .island-grid {
+      display: grid;
+     grid-template-columns: 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .island-card {
+      background: radial-gradient(circle at top, #273561 0, #101425 60%);
+      border-radius: 18px;
+      padding: 16px 14px 18px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(138, 187, 255, 0.45);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border 0.12s ease,
+        background 0.12s ease;
+    }
+
+    .island-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 32px rgba(0, 0, 0, 0.9);
+      border-color: rgba(164, 220, 255, 0.9);
+      background: radial-gradient(circle at top, #33457a 0, #101425 60%);
+    }
+
+    .island-name-en {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      color: #9fb8ff;
+    }
+
+    .island-name-jp {
+      font-size: 18px;
+      margin-top: 4px;
+      color: #ffffff;
+    }
+
+    .island-desc {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #c5d6ff;
+      min-height: 48px;
+    }
+
+    .island-progress {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #9fb8ff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(40, 56, 92, 0.9);
+      overflow: hidden;
+      margin-left: 8px;
+    }
+
+    .progress-inner {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #4ad3ff, #6affc4);
+      transition: width 0.2s ease-out;
+    }
+
+    /* 質問画面 */
+    .question-header {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .question-title {
+      font-size: 22px;
+      margin-bottom: 4px;
+      color: #ffffff;
+    }
+
+    .question-tagline {
+      font-size: 13px;
+      color: #b5c6ff;
+    }
+
+    .question-progress {
+      font-size: 12px;
+      text-align: right;
+      color: #a8c4ff;
+      margin-top: 4px;
+    }
+
+    .question-list {
+      margin-top: 16px;
+    }
+
+    .question-item {
+      margin-bottom: 16px;
+      padding: 12px 12px 10px;
+      border-radius: 14px;
+      background: radial-gradient(circle at top left, #28345f 0, #060814 65%);
+      border: 1px solid rgba(112, 166, 245, 0.55);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.8);
+    }
+
+    .question-label {
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 60px;
+      resize: vertical;
+      border-radius: 10px;
+      border: 1px solid rgba(151, 189, 255, 0.7);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      background: rgba(5, 9, 20, 0.95);
+      color: #f3f5ff;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #68ddff;
+      box-shadow: 0 0 0 1px rgba(111, 221, 255, 0.8);
+    }
+
+    /* まとめ画面 */
+    .summary-lead {
+      text-align: center;
+      color: #d0ddff;
+      margin-bottom: 16px;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    .summary-table th,
+    .summary-table td {
+      border: 1px solid rgba(102, 144, 220, 0.5);
+      padding: 8px 6px;
+      vertical-align: top;
+    }
+
+    .summary-table th {
+      background: rgba(38, 56, 102, 0.85);
+      color: #e9f1ff;
+      white-space: nowrap;
+    }
+
+    .summary-table td {
+      background: rgba(6, 10, 25, 0.9);
+      color: #e7edff;
+    }
+
+    .summary-note {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #a8bcff;
+    }
+
+    .summary-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .summary-footer-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 20px 12px 32px;
+      }
+
+      .screen {
+        padding: 24px 16px 28px;
+        border-radius: 18px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <main>
+    <!-- ================== スタート画面 ================== -->
+    <section id="screen-start" class="screen active">
+      <h1>SelfMap Teens</h1>
+      <div class="quote" id="quote-box">
+        「千里の道も、一歩から。」<span>── 老子</span>
+      </div>
+      <p class="lead">
+        このツールは、「自分のこと・未来・なりたい大人像・願い・不安」をゆっくり言葉にしていくための、ひとり用RPGノートです。<br />
+        思いついたところだけ書いても大丈夫。あとから書き足したり、書き換えたりできます。
+      </p>
+      <div class="center-buttons">
+        <button id="btn-start" class="btn-primary">旅を始める（Start Your Journey）</button>
+      </div>
+    </section>
 
-<main>
+    <!-- ================== マップ画面 ================== -->
+    <section id="screen-map" class="screen">
+      <h2>SelfMap Ocean</h2>
+      <p class="lead">
+        気になる島から、いつでも好きな順番で上陸してOK。<br />
+        すべての島で書き終わると、「旅のまとめ」が開きます。
+      </p>
 
-<!-- =======================
-     Start Screen
-======================= -->
-<section id="screen-start" class="screen active">
-    <h1>SelfMap Teens</h1>
-    <p style="text-align:center; color:#6a9fc8">Know your inner world.</p>
-    <button id="btn-start" class="btn-primary">旅をはじめる</button>
-</section>
+      <div id="island-grid" class="island-grid"></div>
 
-<!-- =======================
-     Map Screen
-======================= -->
-<section id="screen-map" class="screen">
-    <h2>島を選んでね</h2>
-    <div id="island-grid"></div>
-    <div class="center-buttons">
-        <button id="btn-summary" class="btn-secondary">まとめを見る</button>
-        <button id="btn-summary-back-start" class="btn-secondary">スタートへ</button>
-    </div>
-</section>
+      <div class="center-buttons" style="margin-top: 28px">
+        <button id="btn-go-summary" class="btn-secondary">旅のまとめ画面へ</button>
+        <button id="btn-back-start" class="btn-secondary">スタート画面に戻る</button>
+      </div>
+    </section>
 
-<!-- =======================
-     Question Screen
-======================= -->
-<section id="screen-questions" class="screen">
-    <div class="question-header">
-        <h2 id="question-island-jp"></h2>
-        <p id="question-island-en" class="start-title-sub"></p>
-        <p id="question-tagline" style="color:#6a9fc8"></p>
-    </div>
+    <!-- ================== 質問画面 ================== -->
+    <section id="screen-questions" class="screen">
+      <div class="question-header">
+        <div class="question-title" id="question-island-jp"></div>
+        <div class="question-tagline" id="question-tagline"></div>
+        <div class="question-progress" id="question-progress-text"></div>
+      </div>
 
-    <div id="question-list"></div>
+      <div id="question-list" class="question-list"></div>
 
-    <div class="center-buttons">
-        <button id="btn-back-to-map" class="btn-secondary">地図へ戻る</button>
-        <button class="btn-secondary btn-save-island-image">この島を画像保存</button>
-        <button id="btn-go-summary-from-question" class="btn-secondary">まとめへ進む</button>
-    </div>
-</section>
+      <div class="center-buttons">
+        <button id="btn-back-map" class="btn-secondary">マップに戻る</button>
+        <button class="btn-secondary btn-save-island-image">
+          この島を画像として保存（PNG）
+        </button>
+        <button id="btn-go-summary-from-question" class="btn-secondary">
+          旅のまとめへ
+        </button>
+      </div>
+    </section>
 
-<!-- =======================
-     Summary Screen
-======================= -->
-<section id="screen-summary" class="screen">
-    <h2>まとめ</h2>
+    <!-- ================== まとめ画面 ================== -->
+    <section id="screen-summary" class="screen">
+      <h2>旅のまとめ</h2>
+      <p class="summary-lead">
+        5つの島で書いたことを、ざっくり俯瞰するページです。<br />
+        深く整理したくなったら、ノートや別のアプリに写してもOK。
+      </p>
 
-    <table class="summary-table">
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>島</th>
+            <th>質問</th>
+            <th>あなたの答え</th>
+          </tr>
+        </thead>
         <tbody id="summary-body"></tbody>
-    </table>
+      </table>
 
-    <div class="summary-actions">
-        <button id="btn-save-image" class="btn-secondary">まとめを画像保存</button>
-        <button id="btn-export-json" class="btn-secondary">データ書き出し</button>
-        <button id="btn-import-json-display" class="btn-secondary">データ読み込み</button>
-        <input type="file" id="input-import-json" style="display:none;">
-    </div>
+      <p class="summary-note">
+        ※ 書いた内容はブラウザの中（あなたの端末）だけに保存されます。<br />
+        ※ 印刷・画像保存・JSONエクスポートで、他のアプリやPDFにも移せます。
+      </p>
 
-    <div class="center-buttons">
-        <button id="btn-summary-back-map" class="btn-secondary">地図へ戻る</button>
-        <button id="btn-summary-back-start" class="btn-secondary">スタートへ</button>
-    </div>
-</section>
+      <!-- 上部アクション -->
+      <div class="summary-actions">
+        <button id="btn-print" class="btn-secondary">このページを印刷 / PDF保存</button>
+        <button id="btn-save-image" class="btn-secondary">
+          画像として保存（PNG）
+        </button>
+        <button id="btn-export-json" class="btn-secondary">
+          アプリ用データを書き出す（JSON）
+        </button>
+      </div>
 
-</main>
+      <!-- 下部ナビ -->
+      <div class="summary-footer-buttons">
+        <button id="btn-summary-back-map" class="btn-secondary">
+          マップに戻る
+        </button>
+        <button id="btn-summary-back-start" class="btn-secondary">
+          スタート画面に戻る
+        </button>
+      </div>
+    </section>
+  </main>
 
-<!-- ==========================
-     SCRIPT（全部統合）
-========================== -->
-<script>
-/* =========================================
-   SelfMap Teens – script.js 統合版
-========================================= */
+  <!-- html2canvas（画像保存用） -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-const STORAGE_KEY = "selfmap_teens_data";
-let currentIslandKey = null;
+  <!-- ================== SCRIPT ================== -->
+  <script>
+    const STORAGE_KEY = "selfmap_teens_v1";
 
-/* 1. 保存と読み込み */
-function saveAnswers() {
-    const answers = {};
-    document.querySelectorAll(".question-input").forEach(input => {
-        answers[input.dataset.key] = input.value || "";
-    });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
-}
-function loadAnswers() {
-    const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : {};
-}
-function saveAnswersObj(obj) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
-}
+    // ---------- 名言リスト ----------
+    const QUOTES = [
+      { text: "千里の道も、一歩から。", author: "老子" },
+      { text: "未来は、今この瞬間の積み重ねでできている。", author: "Unknown" },
+      { text: "自分を大切にすることは、世界を大切にする第一歩。", author: "Unknown" },
+      { text: "迷うのは、ちゃんと自分の人生を生きようとしている証拠。", author: "Unknown" },
+      { text: "完璧じゃなくていい。少しずつ前に進めばいい。", author: "Unknown" }
+    ];
 
-/* 2. 画面切替 */
-function showScreen(id) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-}
-
-/* 3. 質問データ（100問） */
-const islands = [
-    {
-        key:"personal",
-        name_jp:"パーソナル",
-        name_en:"PERSONAL ISLAND",
-        tagline:"自分の内側を見つめる島",
-        questions:Array.from({length:20},(_,i)=>`${i+1}. パーソナルの質問 ${i+1}`)
-    },
-    {
-        key:"future",
-        name_jp:"フューチャー",
-        name_en:"FUTURE ISLAND",
-        tagline:"未来を描く島",
-        questions:Array.from({length:20},(_,i)=>`${i+1}. フューチャーの質問 ${i+1}`)
-    },
-    {
-        key:"adult",
-        name_jp:"アダルト",
-        name_en:"ADULT ISLAND",
-        tagline:"なりたい自分を描く島",
-        questions:Array.from({length:20},(_,i)=>`${i+1}. アダルトの質問 ${i+1}`)
-    },
-    {
-        key:"wish",
-        name_jp:"ウィッシュ",
-        name_en:"WISH ISLAND",
-        tagline:"願いを集める島",
-        questions:Array.from({length:20},(_,i)=>`${i+1}. ウィッシュの質問 ${i+1}`)
-    },
-    {
-        key:"worry",
-        name_jp:"ウォーリー",
-        name_en:"WORRY ISLAND",
-        tagline:"心配事を整理する島",
-        questions:Array.from({length:20},(_,i)=>`${i+1}. ウォーリーの質問 ${i+1}`)
+    function setRandomQuote() {
+      const box = document.getElementById("quote-box");
+      if (!box) return;
+      const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+      box.innerHTML =
+        "「" + q.text + "」" + '<span>── ' + q.author + "</span>";
     }
-];
 
-/* 4. マップ描画 */
-function renderMap() {
-    const grid = document.getElementById("island-grid");
-    grid.innerHTML = "";
-    islands.forEach(island => {
-        const div = document.createElement("div");
-        div.className = "island-card";
-        div.dataset.key = island.key;
-        div.innerHTML = `<h3>${island.name_jp}</h3><p>${island.name_en}</p>`;
-        grid.appendChild(div);
-    });
-}
+    // ---------- 島データ（各20問） ----------
+    const islands = [
+      {
+        key: "personal",
+        en: "PERSONAL ISLAND",
+        jp: "パーソナル島",
+        tagline: "自分の性格・クセ・価値観を見つける島。",
+        desc: "自分ってこういう人かも？をゆっくり見つける旅。",
+        questions: [
+          "あなたの性格を一言で表すとしたら？",
+          "小さいころから変わっていない、あなたの『らしさ』は？",
+          "最近、人からよく言われる褒め言葉は？",
+          "逆に、人から誤解されやすいところは？",
+          "一人のとき、どんな時間をすごすのがいちばん落ち着く？",
+          "つい考えすぎてしまう場面はどんなとき？",
+          "『これだけはゆずれない』と思う価値観は？",
+          "反対に、『ここはゆるくてOK』と思っているところは？",
+          "今までに一番ハマった趣味や推しは？ そのどこが好き？",
+          "子どものころの自分に、『これは大事にしてね』と言いたいところは？",
+          "今の自分の『いいところ』を3つあげるとしたら？",
+          "今の自分の『伸ばしたいところ』を3つあげるとしたら？",
+          "疲れているときに出やすい、あなたのクセは？",
+          "人からされるとすごく嬉しい小さな気づかいは？",
+          "苦手な人のタイプは？ それはなぜだと思う？",
+          "これまでで、一番成長したなと思う出来事は？",
+          "その出来事から学んだことは？",
+          "『こうなれたらいいな』と思う、自分の理想の性格は？",
+          "そこに近づくために、今日からできそうな小さな一歩は？",
+          "今の自分に、ひとことメッセージを送るとしたら？"
+        ]
+      },
+      {
+        key: "future",
+        en: "FUTURE ISLAND",
+        jp: "フューチャー島",
+        tagline: "高校生活・進路・1年後の自分など、これからの道を考える島。",
+        desc: "『これからどうしたい？』を、言葉にしてみる旅。",
+        questions: [
+          "1年後の自分は、どんな毎日をすごしていると思う？",
+          "高校生活やこれからの生活で、『やってみたいこと』は？",
+          "興味がある分野・教科・ニュース・コンテンツは？",
+          "『この人の生き方いいな』と思う人は？ どこが好き？",
+          "将来の仕事や働き方について、なんとなく思い浮かぶイメージは？",
+          "住んでみたい場所や環境（都会・自然・海外など）は？",
+          "お金の心配がないとしたら、どんなことをして過ごしたい？",
+          "逆に、『これはあまりやりたくないな』と思う働き方は？",
+          "人生で大事にしたいテーマ（例：自由、安定、挑戦、人とのつながり）は？",
+          "10年後の自分に、どんなふうに笑っていてほしい？",
+          "将来、一緒にいたら心地よさそうな人のイメージは？",
+          "その人とどんな会話をしていたい？",
+          "どんな時に『あ、自分いま幸せだな』と感じると思う？",
+          "これから学んでみたいこと・スキル・資格は？",
+          "その中で、まず最初に手をつけてみたいものは？",
+          "今、不安に感じている将来のことは？",
+          "その不安を少しだけ軽くするために、できそうな準備は？",
+          "未来の自分が、いまの自分に『ありがとう』と言いそうな行動は？",
+          "将来の自分から手紙が届いたとしたら、なんて書いてありそう？",
+          "『未来の自分』に、今ひとことお願いできるなら？"
+        ]
+      },
+      {
+        key: "adult",
+        en: "ADULT ISLAND",
+        jp: "アダルト島",
+        tagline: "どんな大人になりたいか、どんな生き方をしたいかを考える島。",
+        desc: "『理想の大人像』をゆっくり描いていく旅。",
+        questions: [
+          "あなたを刺激する人は？（実在でも架空でもOK）",
+          "その人のどこを尊敬している？",
+          "大切にしたい価値観は？（誠実さ、ユーモア、知性など）",
+          "しっくりこない価値観は？（無理しなくていいと思うもの）",
+          "なりたくない大人像は？ それはなぜ？",
+          "逆に、『こういう大人は素敵だな』と思うポイントは？",
+          "どんな場面で頼りにされる大人でいたい？",
+          "仕事・学び・趣味のバランスを、どんなふうに保っていたい？",
+          "将来、大切にしていたい人間関係（家族・友人・パートナーなど）は？",
+          "その人たちと、どんな時間を一緒に過ごしたい？",
+          "自分の弱さや失敗と、どんなふうに付き合える大人でいたい？",
+          "怒りやモヤモヤが湧いたとき、どんな対応ができるといい？",
+          "お金との付き合い方で、大事にしたいことは？",
+          "心と体の健康のために、続けていきたい習慣は？",
+          "もし後輩や子どもにアドバイスするとしたら、何を伝えたい？",
+          "『これだけは人生で挑戦してみたい』と思うことは？",
+          "その挑戦を、少しだけ現実に近づけるとしたら何をする？",
+          "理想の大人になった自分は、どんな顔で笑っていると思う？",
+          "そこに近づくために、今の自分が手放してもいいかもしれないものは？",
+          "理想の大人になった未来の自分から、いまの自分への応援メッセージは？"
+        ]
+      },
+      {
+        key: "wish",
+        en: "WISH ISLAND",
+        jp: "ウィッシュ島",
+        tagline: "小さな願いから、大きな夢まで、心の『こうなったらいいな』を集める島。",
+        desc: "遠慮せずに、願いごとをたくさん並べてみる旅。",
+        questions: [
+          "いま、パッと思いつく『こうなったらいいな』は？",
+          "子どものころの夢や、なりたかったものは？",
+          "『本当はやってみたいけど、言いづらいこと』はある？",
+          "叶ったら、誰にも自慢せずこっそり喜びたい願いは？",
+          "暮らしの中で、ちょっと良くなったら嬉しいポイントは？",
+          "心がふわっと軽くなる瞬間はどんなとき？",
+          "今より少しだけ自信がついたら、やってみたいことは？",
+          "時間の心配がなければ挑戦してみたいことは？",
+          "お金の心配がなければやってみたいことは？",
+          "誰かと一緒に叶えたい願いは？ その人は誰？",
+          "『まだ誰にも言っていない小さな夢』を書いてみよう。",
+          "叶わなくても、考えるだけで楽しい妄想は？",
+          "叶えたい願いを1つだけ選ぶとしたら、今はどれ？",
+          "その願いが叶ったとき、あなたはどんな表情をしていると思う？",
+          "願いを叶えるために、周りの人に頼ってもよさそうなことは？",
+          "逆に、自分で一歩踏み出してみたい部分は？",
+          "今すぐできる、ほんの小さなアクションは？",
+          "3ヶ月後、『ちょっと前進したな』と思える状態は？",
+          "願いが全部は叶わなくても、『これだけは守りたい』と思うことは？",
+          "未来の自分が、叶った願いを振り返っているときに言いそうなひと言は？"
+        ]
+      },
+      {
+        key: "worry",
+        en: "WORRY ISLAND",
+        jp: "ウォーリー島",
+        tagline: "心配ごとや不安をいったん預けておける島。",
+        desc: "不安と上手につき合う方法を探す旅。",
+        questions: [
+          "今、いちばん気になっている心配ごとは？",
+          "その不安を10段階で表すと今はいくつ？",
+          "その不安の中に、『少しだけ安心できる要素』はある？",
+          "一番こわい『最悪のパターン』は？",
+          "それが起こる確率を、正直に数字で書くとどれくらい？",
+          "そのとき、自分にできる対処はある？",
+          "信頼できそうな人・場所・制度など、相談先になりそうなものは？",
+          "その人に、どんな言葉をかけてほしい？",
+          "過去に似た不安を乗り越えたことはある？ どうやって？",
+          "そのとき役に立ったこと・人・考え方は？",
+          "今の自分にとって『やりすぎなくていいこと』は？",
+          "逆に、『少しだけ増やしてみたいこと』（休む・話す・書くなど）は？",
+          "休みたいとき、どんな休み方が合いそう？",
+          "自分を守るために境界線を引きたいことは？",
+          "『ここだけは安全』と感じる場所や時間は？",
+          "未来の自分から見たとき、この不安はどんな意味を持ちそう？",
+          "今の自分にかけてあげたい労わりの言葉は？",
+          "誰かに手伝ってもらえたら楽になりそうなことは？",
+          "不安を抱えたままでも、今日できそうな小さな一歩は？",
+          "すべてを書き終えた自分に、ひと言ねぎらいを送るなら？"
+        ]
+      }
+    ];
 
-/* 5. 島の質問表示 */
-function openIsland(key) {
-    const island = islands.find(i => i.key === key);
-    currentIslandKey = key;
+    // ---------- ストレージ ----------
+    function loadAnswers() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return {};
+        const obj = JSON.parse(raw);
+        if (!obj || typeof obj !== "object") return {};
+        return obj;
+      } catch (e) {
+        console.warn("loadAnswers error", e);
+        return {};
+      }
+    }
 
-    document.getElementById("question-island-jp").textContent = island.name_jp;
-    document.getElementById("question-island-en").textContent = island.name_en;
-    document.getElementById("question-tagline").textContent = island.tagline;
+    function saveAnswersObj(obj) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+      } catch (e) {
+        console.warn("saveAnswers error", e);
+      }
+    }
 
-    const list = document.getElementById("question-list");
-    list.innerHTML = "";
-    const answers = loadAnswers();
+    // ---------- 画面切り替え ----------
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach((s) => {
+        s.classList.toggle("active", s.id === id);
+      });
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
 
-    island.questions.forEach((q,i)=>{
-        const keyName = `${island.key}_${i+1}`;
-        const div = document.createElement("div");
-        div.className="question-item";
-        div.innerHTML = `
-            <label class="question-label">${q}</label>
-            <textarea class="question-input" data-key="${keyName}" rows="2">${answers[keyName]||""}</textarea>
+    // ---------- マップ描画 ----------
+    function countAnswered(arr) {
+      if (!Array.isArray(arr)) return 0;
+      return arr.filter((v) => typeof v === "string" && v.trim() !== "").length;
+    }
+
+    function renderMap() {
+      const islandGrid = document.getElementById("island-grid");
+      const answers = loadAnswers();
+      islandGrid.innerHTML = "";
+
+      islands.forEach((island) => {
+        const card = document.createElement("div");
+        card.className = "island-card";
+        card.dataset.key = island.key;
+
+        const ansArr = answers[island.key] || [];
+        const answered = countAnswered(ansArr);
+        const total = island.questions.length;
+        const progressPct = total === 0 ? 0 : Math.round((answered / total) * 100);
+
+        card.innerHTML = `
+          <div class="island-name-en">${island.en}</div>
+          <div class="island-name-jp">${island.jp}</div>
+          <div class="island-desc">${island.desc}</div>
+          <div class="island-progress">
+            <span>進捗：${answered} / ${total} (${progressPct}%)</span>
+            <div class="progress-bar">
+              <div class="progress-inner" style="width:${progressPct}%;"></div>
+            </div>
+          </div>
         `;
-        list.appendChild(div);
-    });
 
-    document.querySelectorAll(".question-input").forEach(inp=>{
-        inp.addEventListener("input", saveAnswers);
-    });
+        islandGrid.appendChild(card);
+      });
+    }
 
-    showScreen("screen-questions");
-}
+    // ---------- 質問画面 ----------
+    let currentIslandKey = null;
 
-/* 6. まとめ生成 */
-function buildSummary() {
-    const tbody = document.getElementById("summary-body");
-    const answers = loadAnswers();
-    tbody.innerHTML="";
+    function openIsland(key) {
+      const island = islands.find((i) => i.key === key);
+      if (!island) return;
 
-    islands.forEach(island=>{
-        let html="";
-        island.questions.forEach((q,i)=>{
-            const k = `${island.key}_${i+1}`;
-            html += `<div><strong>${q}</strong><br>${answers[k]||""}</div>`;
+      currentIslandKey = key;
+
+      document.getElementById("question-island-jp").textContent = island.jp;
+      document.getElementById("question-tagline").textContent = island.tagline;
+
+      const answers = loadAnswers();
+      if (!Array.isArray(answers[key])) {
+        answers[key] = new Array(island.questions.length).fill("");
+      } else if (answers[key].length < island.questions.length) {
+        answers[key].length = island.questions.length;
+      }
+      saveAnswersObj(answers);
+
+      const list = document.getElementById("question-list");
+      list.innerHTML = "";
+
+      island.questions.forEach((q, index) => {
+        const item = document.createElement("div");
+        item.className = "question-item";
+        const value = answers[key][index] || "";
+
+        item.innerHTML = `
+          <div class="question-label">Q${index + 1}. ${q}</div>
+          <textarea data-index="${index}" placeholder="短くても長くてもOK。思いついたことだけ、ゆっくり書いてみよう。">${value}</textarea>
+        `;
+        list.appendChild(item);
+      });
+
+      updateQuestionProgress();
+      showScreen("screen-questions");
+    }
+
+    function updateQuestionProgress() {
+      const island = islands.find((i) => i.key === currentIslandKey);
+      if (!island) return;
+      const answers = loadAnswers();
+      const ansArr = answers[currentIslandKey] || [];
+      const answered = countAnswered(ansArr);
+      const total = island.questions.length;
+      const pct = total === 0 ? 0 : Math.round((answered / total) * 100);
+      const label = `回答：${answered} / ${total} (${pct}%)`;
+      document.getElementById("question-progress-text").textContent = label;
+    }
+
+    function handleQuestionInput(e) {
+      if (e.target.tagName !== "TEXTAREA") return;
+      const index = Number(e.target.dataset.index);
+      if (!Number.isFinite(index) || currentIslandKey === null) return;
+
+      const answers = loadAnswers();
+      if (!Array.isArray(answers[currentIslandKey])) {
+        answers[currentIslandKey] = [];
+      }
+      answers[currentIslandKey][index] = e.target.value;
+      saveAnswersObj(answers);
+      updateQuestionProgress();
+    }
+
+    // ---------- まとめ画面 ----------
+    function buildSummary() {
+      const tbody = document.getElementById("summary-body");
+      tbody.innerHTML = "";
+      const answers = loadAnswers();
+
+      islands.forEach((island) => {
+        const ansArr = answers[island.key] || [];
+        island.questions.forEach((q, idx) => {
+          const tr = document.createElement("tr");
+          if (idx === 0) {
+            tr.innerHTML = `
+              <td rowspan="${island.questions.length}">${island.jp}</td>
+              <td>Q${idx + 1}. ${q}</td>
+              <td>${(ansArr[idx] || "").replace(/\n/g, "<br>")}</td>
+            `;
+          } else {
+            tr.innerHTML = `
+              <td>Q${idx + 1}. ${q}</td>
+              <td>${(ansArr[idx] || "").replace(/\n/g, "<br>")}</td>
+            `;
+          }
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    // ---------- 画像保存（まとめ） ----------
+    function saveSummaryAsImage() {
+      buildSummary();
+      const target = document.getElementById("screen-summary");
+      setTimeout(() => {
+        html2canvas(target, { scale: 2 }).then((canvas) => {
+          canvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "selfmap_teens_summary.png";
+            a.click();
+            URL.revokeObjectURL(url);
+          });
+        });
+      }, 150);
+    }
+
+    // ---------- 画像保存（島ごと） ----------
+    function setupIslandImageButtons() {
+      document
+        .querySelectorAll(".btn-save-island-image")
+        .forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const target = document.getElementById("screen-questions");
+            const island = islands.find((i) => i.key === currentIslandKey);
+            const filename = island
+              ? `selfmap_${island.key}.png`
+              : "selfmap_island.png";
+
+            html2canvas(target, { scale: 2 }).then((canvas) => {
+              canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+              });
+            });
+          });
+        });
+    }
+
+    // ---------- JSONエクスポート ----------
+    function exportJsonForApp() {
+      const answers = loadAnswers();
+      const blob = new Blob([JSON.stringify(answers, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "selfmap_teens_data.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ---------- イベント登録 ----------
+    document.addEventListener("DOMContentLoaded", () => {
+      setRandomQuote();
+      renderMap();
+
+      // スタート
+      document
+        .getElementById("btn-start")
+        .addEventListener("click", () => showScreen("screen-map"));
+
+      // マップ → まとめ
+      document
+        .getElementById("btn-go-summary")
+        .addEventListener("click", () => {
+          buildSummary();
+          showScreen("screen-summary");
         });
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td class="summary-island-name">${island.name_jp}</td>
-            <td>${html}</td>
-        `;
-        tbody.appendChild(tr);
+      // スタートへ戻る
+      document
+        .getElementById("btn-back-start")
+        .addEventListener("click", () => showScreen("screen-start"));
+
+      // 質問画面のボタン
+      document
+        .getElementById("btn-back-map")
+        .addEventListener("click", () => {
+          renderMap();
+          showScreen("screen-map");
+        });
+
+      document
+        .getElementById("btn-go-summary-from-question")
+        .addEventListener("click", () => {
+          buildSummary();
+          showScreen("screen-summary");
+        });
+
+      // まとめ画面のボタン
+      document
+        .getElementById("btn-summary-back-map")
+        .addEventListener("click", () => {
+          renderMap();
+          showScreen("screen-map");
+        });
+
+      document
+        .getElementById("btn-summary-back-start")
+        .addEventListener("click", () => showScreen("screen-start"));
+
+      // 印刷
+      document
+        .getElementById("btn-print")
+        .addEventListener("click", () => {
+          buildSummary();
+          showScreen("screen-summary");
+          setTimeout(() => window.print(), 80);
+        });
+
+      // まとめ画像保存
+      document
+        .getElementById("btn-save-image")
+        .addEventListener("click", saveSummaryAsImage);
+
+      // JSON書き出し
+      document
+        .getElementById("btn-export-json")
+        .addEventListener("click", exportJsonForApp);
+
+      // 島カードクリック
+      document.addEventListener("click", (e) => {
+        const card = e.target.closest(".island-card");
+        if (card) {
+          openIsland(card.dataset.key);
+        }
+      });
+
+      // 質問入力
+      document
+        .getElementById("question-list")
+        .addEventListener("input", handleQuestionInput);
+
+      // 島ごとの画像保存ボタン
+      setupIslandImageButtons();
     });
-}
-
-/* 7. PNG保存（まとめ） */
-document.getElementById("btn-save-image").addEventListener("click",()=>{
-    html2canvas(document.getElementById("screen-summary"),{scale:2})
-    .then(canvas=>{
-        const a=document.createElement("a");
-        a.href=canvas.toDataURL("image/png");
-        a.download="summary.png";
-        a.click();
-    });
-});
-
-/* 8. PNG保存（島） */
-document.querySelector(".btn-save-island-image").addEventListener("click",()=>{
-    html2canvas(document.getElementById("screen-questions"),{scale:2})
-    .then(canvas=>{
-        const a=document.createElement("a");
-        a.href=canvas.toDataURL("image/png");
-        a.download=`${currentIslandKey}.png`;
-        a.click();
-    });
-});
-
-/* 9. JSON書き出し */
-document.getElementById("btn-export-json").addEventListener("click",()=>{
-    const blob=new Blob([JSON.stringify(loadAnswers(),null,2)],{type:"application/json"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
-    a.download="selfmap.json";
-    a.click();
-});
-
-/* 10. JSON読み込み */
-document.getElementById("btn-import-json-display").addEventListener("click",()=>{
-    document.getElementById("input-import-json").click();
-});
-document.getElementById("input-import-json").addEventListener("change",e=>{
-    const f=e.target.files[0];
-    const reader=new FileReader();
-    reader.onload=()=>{
-        try { saveAnswersObj(JSON.parse(reader.result)); location.reload(); }
-        catch { alert("読み込み失敗"); }
-    };
-    reader.readAsText(f);
-});
-
-/* 11. ページ遷移ボタン */
-document.getElementById("btn-start").addEventListener("click",()=>showScreen("screen-map"));
-document.getElementById("btn-summary").addEventListener("click",()=>{buildSummary(); showScreen("screen-summary");});
-document.getElementById("btn-go-summary-from-question").addEventListener("click",()=>{buildSummary(); showScreen("screen-summary");});
-document.getElementById("btn-back-to-map").addEventListener("click",()=>showScreen("screen-map"));
-document.getElementById("btn-summary-back-map").addEventListener("click",()=>showScreen("screen-map"));
-document.getElementById("btn-summary-back-start").addEventListener("click",()=>showScreen("screen-start"));
-
-/* 12. 島カードクリック */
-document.addEventListener("click",e=>{
-    const card=e.target.closest(".island-card");
-    if(card) openIsland(card.dataset.key);
-});
-
-/* 初期化 */
-renderMap();
-</script>
-
+  </script>
 </body>
 </html>

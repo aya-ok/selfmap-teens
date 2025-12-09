@@ -136,11 +136,12 @@
 
     /* マップ画面：カード */
     .island-grid {
-      display: grid;
-     grid-template-columns: 1fr;
-      gap: 20px;
-      margin-top: 24px;
-    }
+  display: flex;
+  flex-direction: column;   /* 縦に一列に並べる */
+  align-items: center;      /* カードを中央寄せ */
+  gap: 20px;
+  margin-top: 24px;
+}
 
     .island-card {
       background: radial-gradient(circle at top, #273561 0, #101425 60%);

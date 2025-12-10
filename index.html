@@ -133,6 +133,22 @@
     /* ------------------------------
        カード（マップ画面）
     ------------------------------ */
+    /* ====== マップ画面：カードレイアウト ====== */
+#island-grid {
+    display: flex;
+    flex-wrap: nowrap;         /* 横一列に並べる */
+    justify-content: center;   /* 真ん中に集める */
+    gap: 32px;                 /* カード同士の間隔 */
+    margin-top: 32px;
+    overflow-x: auto;          /* 横スクロール許可 */
+    padding-bottom: 16px;
+}
+
+/* ====== カードのサイズ ====== */
+.island-card {
+    flex: 0 0 210px;           /* カード幅固定（並ぶ） */
+}
+
     .map-container {
       margin-top: 32px;
     }
